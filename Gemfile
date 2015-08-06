@@ -43,10 +43,13 @@ group :development, :test do
   gem 'binding_of_caller'
   gem 'spring-commands-rspec'
   gem 'guard-rspec'
-
+  gem 'fabrication'
+  gem 'pry'
+  gem 'pry-nav'
 end
 
 group :test do
   gem 'capybara'
+  gem 'faker'
 end
 
