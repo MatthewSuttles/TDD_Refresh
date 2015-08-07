@@ -30,4 +30,15 @@ RSpec.describe AuthorsController, type: :controller do
     end
   end
 
+  describe "GET #new" do
+    it "assigns a new author object to @author variable" do
+      get :new
+      expect(assigns(:author)).to be_instance_of(Author)
+    end
+    it "renders the new template" do
+      get :new
+      expect(response).to render_template :new
+    end
+  end
+
 end
