@@ -41,4 +41,98 @@ RSpec.describe AuthorsController, type: :controller do
     end
   end
 
+  describe "POST #create" do
+    let(:valid_author){Fabricate.attributes_for(:author)}
+    let(:invalid_author){Fabricate.attributes_for(:author, first_name: nil)}
+
+    context "a successful create" do
+      it "saves the new author" do
+        post :create, author: valid_author
+        expect(Author.count).to eq(1)
+      end
+
+      it "should redirect to show action" do
+        post :create, author: valid_author
+        expect(response).to redirect_to author_path(Author.first)
+      end
+
+      it "sets the success flash message" do
+        post :create, author: valid_author
+        expect(flash[:success]).to eq("Author has been created")
+      end
+    end
+
+    context "a unsuccessful create" do
+      it "does not save the new author object with invalid inputs" do
+        post :create, author: invalid_author
+        expect(Author.count).to eq(0)
+      end
+
+      it "it renders the new template" do
+        post :create, author: invalid_author
+        expect(response).to  render_template :new
+      end
+
+      it "sets the error flash message" do
+        post :create, author: invalid_author
+        expect(flash[:error]).to eq("Author has not been created")
+      end
+    end
+  end
+
+  describe "GET #edit" do
+    let(:author){Fabricate(:author)}
+
+    it "finds the author with given id and assigns to @author variable" do
+      get :edit, id: author
+      expect(assigns(:author)).to eq(author)
+    end
+
+    it "renders the edit template" do
+      get :edit, id: author
+      expect(response).to render_template :edit
+    end
+  end
+
+  describe "PUT #update" do
+    context "successful update" do
+      let(:author){Fabricate(:author)}
+      let(:author_attributes){Fabricate.attributes_for(:author, first_name: 'Paul')}
+
+      it "updates the modified author object" do
+        put :update, author: author_attributes, id: author.id
+        expect(Author.first.first_name).to eq('Paul')
+      end
+
+      it "redirects to the show action" do
+        put :update, author: author_attributes, id: author.id
+        expect(response).to redirect_to author_path(Author.first)
+      end
+
+      it "sets the success flash message" do
+        put :update, author: author_attributes, id: author.id
+        expect(flash[:success]).to eq("Author has been updated")
+      end
+    end
+
+    context "unsuccessful update" do
+      let(:author){Fabricate(:author, first_name: 'Paul')}
+      let(:author_attributes){Fabricate.attributes_for(:author, first_name: nil)}
+
+      it "updates the modified author object" do
+        put :update, author: author_attributes, id: author.id
+        expect(Author.first.first_name).to eq('Paul')
+      end
+
+      it "renders the edit action" do
+        put :update, author: author_attributes, id: author.id
+        expect(response).to render_template :edit
+      end
+
+      it "sets the error flash message" do
+        put :update, author: author_attributes, id: author.id
+        expect(flash[:error]).to eq("Author has not been updated")
+      end
+    end
+  end
 end
