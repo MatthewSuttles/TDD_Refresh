@@ -2,6 +2,7 @@ require 'rails_helper'
 
 RSpec.describe AuthorsController, type: :controller do
 
+  #____________INDEX______________
   describe "GET #index" do
     it "assigns the authors object to @authors variable" do
       author1 = Fabricate(:author)
@@ -16,6 +17,7 @@ RSpec.describe AuthorsController, type: :controller do
     end
   end
 
+  #____________SHOW_________________
   describe "GET #show" do
     let(:author){author = Fabricate(:author)}
 
@@ -30,6 +32,7 @@ RSpec.describe AuthorsController, type: :controller do
     end
   end
 
+  #_____________NEW___________________
   describe "GET #new" do
     it "assigns a new author object to @author variable" do
       get :new
@@ -41,6 +44,7 @@ RSpec.describe AuthorsController, type: :controller do
     end
   end
 
+  #_____________CREATE__________________
   describe "POST #create" do
     let(:valid_author){Fabricate.attributes_for(:author)}
     let(:invalid_author){Fabricate.attributes_for(:author, first_name: nil)}
@@ -80,6 +84,7 @@ RSpec.describe AuthorsController, type: :controller do
     end
   end
 
+  #__________EDIT__________________
   describe "GET #edit" do
     let(:author){Fabricate(:author)}
 
@@ -94,6 +99,7 @@ RSpec.describe AuthorsController, type: :controller do
     end
   end
 
+  #______________UPDATE________________
   describe "PUT #update" do
     context "successful update" do
       let(:author){Fabricate(:author)}
@@ -133,6 +139,26 @@ RSpec.describe AuthorsController, type: :controller do
         put :update, author: author_attributes, id: author.id
         expect(flash[:error]).to eq("Author has not been updated")
       end
+    end
+  end
+
+  #______________DESTROY___________________
+  describe "DELETE #destroy" do
+    let(:author){Fabricate(:author)}
+
+    it "should delete the author with given id" do
+      delete :destroy, id:author
+      expect(Author.count).to eq(0)
+    end
+
+    it "sets flash message" do
+      delete :destroy, id:author
+      expect(flash[:success]).to eq("Author has been deleted")
+    end
+
+    it "redirects to index page" do
+      delete :destroy, id:author
+      expect(response).to redirect_to authors_path
     end
   end
 end
