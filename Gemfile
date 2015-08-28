@@ -51,8 +51,13 @@ group :development, :test do
   gem 'pry-nav'
 end
 
+group :development do
+  gem 'thin'
+end
+
 group :test do
   gem 'capybara'
   gem 'faker'
+  gem 'shoulda-matchers'
 end
 
